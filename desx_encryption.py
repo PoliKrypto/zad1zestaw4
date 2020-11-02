@@ -1,0 +1,52 @@
+import desx_keygen_helpers as keygen_helpers
+import desx_helpers as helpers
+
+
+class DesxEncryption:
+
+	def __init__(self, key1txt, key2txt, key3txt):
+		self.key1 = keygen_helpers.key_64bit(key1txt)
+		self.key2 = keygen_helpers.key_64bit(key2txt)
+		self.key3 = keygen_helpers.key_64bit(key3txt)
+
+	def desx(self, text, decoding=False):
+		message_blocks = helpers.split_message(text, 8)
+		binary_blocks = helpers.binary_message_blocks(message_blocks)
+		binary_cipher_blocks = []
+		for index, block in enumerate(binary_blocks):
+			binary_block_xored = helpers.xor(binary_blocks[index], self.key1)
+			permutated_binary_block = keygen_helpers.key_permutation(binary_block_xored, helpers.IP)
+			binary_cipher = self.des(permutated_binary_block)
+			binary_block_xored = helpers.xor(binary_cipher, self.key3)
+			binary_cipher_blocks.append(binary_block_xored)
+		binary_cipher = ''.join(binary_cipher_blocks)
+		return binary_cipher
+
+	def des(self, word, decoding=False):
+		cipher = ''
+		left = word[:32]
+		right = word[32:]
+		sub_keys = []
+
+		if decoding:
+			for i in reversed(keygen_helpers.keys_generator(self.key2)):
+				sub_keys.append(i)
+		else:
+			sub_keys = keygen_helpers.keys_generator(self.key2)
+
+		for sub_key in sub_keys:
+			perm_right = keygen_helpers.key_permutation(right, helpers.E_BIT)
+			xor_right = helpers.xor(perm_right, sub_key)
+			xor_blocks = helpers.split_message(xor_right, 6)
+			perm_s_right = keygen_helpers.perm_s(xor_blocks)
+			perm2_right = keygen_helpers.key_permutation(perm_s_right, helpers.P)
+			buf = right
+			right = helpers.xor(perm2_right, left)
+			left = buf
+
+		buf = right
+		right = left
+		left = buf
+		new = left + right
+		cipher += keygen_helpers.key_permutation(new, helpers.IP2)
+		return cipher
