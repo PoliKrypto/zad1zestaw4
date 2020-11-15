@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from desx_encryption import DesxEncryption
+import helpers
 
 
 class Application(tk.Frame):
@@ -25,13 +26,14 @@ class Application(tk.Frame):
 
     def encypt(self):
         text = self.input.get('1.0', tk.END)
+        text = helpers.remove_polish_characters(text)
 
         encryptor = DesxEncryption('twojstary', 'testtest', 'dupadupa')
 
         binary_cipher = encryptor.desx(text)
 
         self.output.delete('1.0', tk.END)
-        self.output.insert(index='1.0', chars=hex(int(binary_cipher, 2)))
+        self.output.insert(index='1.0', chars=binary_cipher)
 
     def decrypt(self):
         text = self.output.get('1.0', tk.END)
