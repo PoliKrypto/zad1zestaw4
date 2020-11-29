@@ -40,7 +40,7 @@ E_BIT = (32, 1, 2, 3, 4, 5,
 
 def split_message(message, n):
     if len(message) % n != 0:
-        message += ' ' * (n - len(message) % n)
+        message += '\0' * (n - len(message) % n)
     blocks_amount = len(message) // n
     message_blocks = [''] * blocks_amount
     i = 0

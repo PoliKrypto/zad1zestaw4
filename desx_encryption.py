@@ -10,17 +10,56 @@ class DesxEncryption:
 		self.key3 = keygen_helpers.key_64bit(key3txt)
 
 	def desx(self, text, decoding=False):
-		message_blocks = helpers.split_message(text, 8)
-		binary_blocks = helpers.binary_message_blocks(message_blocks)
-		binary_cipher_blocks = []
-		for index, block in enumerate(binary_blocks):
-			binary_block_xored = helpers.xor(binary_blocks[index], self.key1)
-			permutated_binary_block = keygen_helpers.key_permutation(binary_block_xored, helpers.IP)
-			binary_cipher = self.des(permutated_binary_block)
-			binary_block_xored = helpers.xor(binary_cipher, self.key3)
-			binary_cipher_blocks.append(binary_block_xored)
-		binary_cipher = ''.join(binary_cipher_blocks)
-		return binary_cipher
+		print('debug 1')
+		print(text)
+
+		if decoding:
+			output = ''
+			cipher_blocks = helpers.split_message(text, 64)
+			print('debug 2')
+			print(cipher_blocks)
+			for block in cipher_blocks:
+				print('debug 3')
+				print(block)
+				cipher_block_xored = helpers.xor(block, self.key3)
+				print('debug 4')
+				print(cipher_block_xored)
+				permutated_cipher_block = keygen_helpers.key_permutation(cipher_block_xored, helpers.IP)
+				print('debug 5')
+				print(permutated_cipher_block)
+				message = self.des(permutated_cipher_block, decoding=True)
+				print('debug 6')
+				print(message)
+				message = helpers.xor(message, self.key1)
+				print('debug 7')
+				print(message)
+				message = helpers.split_message(message, 8)
+				print('debug 8')
+				print(message)
+				print('ascii values')
+				for byte in message:
+					print(int(byte, 2))
+					output += (chr(int(byte, 2)))
+			print('debug 9')
+			print(output)
+			return output
+
+		else:
+			message_blocks = helpers.split_message(text, 8)
+			print('debug 2')
+			print(message_blocks)
+			binary_blocks = helpers.binary_message_blocks(message_blocks)
+			print('debug 3')
+			print(binary_blocks)
+			binary_cipher_blocks = []
+			for index, block in enumerate(binary_blocks):
+				binary_block_xored = helpers.xor(binary_blocks[index], self.key1)
+				permutated_binary_block = keygen_helpers.key_permutation(binary_block_xored, helpers.IP)
+				binary_cipher = self.des(permutated_binary_block)
+				binary_block_xored = helpers.xor(binary_cipher, self.key3)
+				binary_cipher_blocks.append(binary_block_xored)
+			binary_cipher = ''.join(binary_cipher_blocks)
+			return binary_cipher
 
 	def des(self, word, decoding=False):
 		cipher = ''
