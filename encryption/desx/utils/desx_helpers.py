@@ -50,6 +50,7 @@ def split_message(message, n):
         if i % n == 0:
             i = 0
             n_block += 1
+    # message_blocks = [block.encode() for block in message_blocks]
     return message_blocks
 
 

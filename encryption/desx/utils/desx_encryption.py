@@ -11,47 +11,46 @@ class DesxEncryption:
 		self.key3 = keygen_helpers.key_64bit(key3txt)
 
 	def desx(self, text, decoding=False):
-		print('debug 1')
-		print(text)
+
+		# print('debug')
+		# print()
+		# print(type())
 
 		if decoding:
 			output = ''
 			cipher_blocks = helpers.split_message(text, 64)
-			print('debug 2')
-			print(cipher_blocks)
 			for block in cipher_blocks:
-				print('debug 3')
-				print(block)
 				cipher_block_xored = helpers.xor(block, self.key3)
-				print('debug 4')
-				print(cipher_block_xored)
 				permutated_cipher_block = keygen_helpers.key_permutation(cipher_block_xored, helpers.IP)
-				print('debug 5')
-				print(permutated_cipher_block)
 				message = self.des(permutated_cipher_block, decoding=True)
-				print('debug 6')
-				print(message)
 				message = helpers.xor(message, self.key1)
-				print('debug 7')
-				print(message)
 				message = helpers.split_message(message, 8)
-				print('debug 8')
-				print(message)
-				print('ascii values')
 				for byte in message:
-					print(int(byte, 2))
 					output += (chr(int(byte, 2)))
-			print('debug 9')
-			print(output)
-			return output
+			return output.encode('latin1').decode()
 
 		else:
+			print('debug 1')
+			print(text)
+			print(type(text))
+			xd = text.encode()
+			print(xd)
+			print(xd.decode('latin1'))
+
+			text = text.encode().decode('latin1')
+
 			message_blocks = helpers.split_message(text, 8)
+
 			print('debug 2')
 			print(message_blocks)
+			print(type(message_blocks))
+
 			binary_blocks = helpers.binary_message_blocks(message_blocks)
+
 			print('debug 3')
 			print(binary_blocks)
+			print(type(binary_blocks))
+
 			binary_cipher_blocks = []
 			for index, block in enumerate(binary_blocks):
 				binary_block_xored = helpers.xor(binary_blocks[index], self.key1)

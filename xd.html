@@ -2,8 +2,6 @@
 <html>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
     <script>
       $(document).ready(function () {
         $("#submit_encrypt").click(function () {
@@ -97,6 +95,7 @@
           const reader = new FileReader();
           reader.onload = function () {
             console.log(reader.result);
+            console.log(typeof reader.result)
             var settings = {
               "url": "http://localhost:8000/api/encrypt",
               "method": "POST",
@@ -124,7 +123,7 @@
                 })[0].click()
             });
           }
-          // reader.readAsText(event.target.files[0])
+          //reader.readAsText(event.target.files[0], 'ascii')
           reader.readAsBinaryString(event.target.files[0]);
         })
 
