@@ -1,5 +1,6 @@
-import desx_keygen_helpers as keygen_helpers
-import desx_helpers as helpers
+
+from . import desx_helpers as helpers
+from . import desx_keygen_helpers as keygen_helpers
 
 
 class DesxEncryption:
