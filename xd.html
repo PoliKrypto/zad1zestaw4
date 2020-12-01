@@ -165,42 +165,48 @@
 
         });
     </script>
+
     <title>DESX</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<h1>DESX</h1>
-
-<div id="keysAndButtons">
-    <div id="keys">
-        <input type="text" id="key1">
-        <input type="text" id="key2">
-        <input type="text" id="key3">
-    </div>
-    <div class="buttons">
-        <input id="generate_keys" type="submit" value="generate keys">
-        <input id="save_keys" type="submit" value="save keys">
-    </div>
+<div class="intro">
+    <h1>Welcome to DESX</h1>
+    <button>Start</button>
 </div>
 
-<div class="area">
-    <p>Decrypted text</p>
-    <textarea id="input_encrypt" rows="4" cols="50"></textarea>
-    <div class="buttons">
-        <input id="submit_encrypt" type="submit" value="encrypt">
+<div class="desx fadeOut">
+    <h1>DESX</h1>
+
+    <div id="keysAndButtons">
+        <div id="keys">
+            <input type="text" id="key1">
+            <input type="text" id="key2">
+            <input type="text" id="key3">
+        </div>
+        <div class="buttons">
+            <input id="generate_keys" type="submit" value="generate keys">
+            <input id="save_keys" type="submit" value="save keys">
+        </div>
+    </div>
+
+    <div class="area">
+        <p>Decrypted text</p>
+        <textarea id="input_encrypt" rows="4" cols="50"></textarea>
+        <div class="buttons">
+            <input id="submit_encrypt" type="submit" value="encrypt">
+        </div>
+    </div>
+
+
+    <div class="area">
+        <p>Encrypted text</p>
+        <textarea id="input_decrypt" rows="4" cols="50"></textarea>
+        <div class="buttons">
+            <input id="submit_decrypt" type="submit" value="decrypt">
+        </div>
     </div>
 </div>
-
-
-<div class="area">
-    <p>Encrypted text</p>
-    <textarea id="input_decrypt" rows="4" cols="50"></textarea>
-    <div class="buttons">
-        <input id="submit_decrypt" type="submit" value="decrypt">
-    </div>
-</div>
-
 <!--<div class="selectFilesArea">-->
 <!--    <div class="selectFiles">-->
 <!--        <p>Choose a file to encrypt</p>-->
@@ -214,6 +220,18 @@
 
 
 <!--<input id="save_encrypted_file" type="submit" value="save as file">-->
+<script>const startDESX = () => {
+    const startBtn = document.querySelector(".intro button");
+    const introScreen = document.querySelector(".intro");
+    const desx = document.querySelector(".desx");
+    console.log("dupa");
 
+    startBtn.addEventListener("click", () => {
+        introScreen.classList.add("fadeOut");
+        desx.classList.add("fadeIn");
+        console.log("dupa");
+    });
+};
+startDESX();</script>
 </body>
 </html>
