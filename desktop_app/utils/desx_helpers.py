@@ -1,5 +1,4 @@
-import desx_keygen_helpers as keygen_helpers
-
+from . import desx_keygen_helpers as keygen_helpers
 
 IP = (58, 50, 42, 34, 26, 18, 10, 2,
       60, 52, 44, 36, 28, 20, 12, 4,
@@ -51,6 +50,7 @@ def split_message(message, n):
         if i % n == 0:
             i = 0
             n_block += 1
+    # message_blocks = [block.encode() for block in message_blocks]
     return message_blocks
 
 
