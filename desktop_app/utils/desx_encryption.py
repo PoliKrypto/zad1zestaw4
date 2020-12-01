@@ -12,10 +12,6 @@ class DesxEncryption:
 
 	def desx(self, text, decoding=False):
 
-		# print('debug')
-		# print()
-		# print(type())
-
 		if decoding:
 			output = ''
 			text = text.encode().decode('latin1')
@@ -29,29 +25,10 @@ class DesxEncryption:
 				for byte in message:
 					output += (chr(int(byte, 2)))
 			return output.encode('latin1')
-			#return output
 
 		else:
-			# print('debug 1')
-			# print(text)
-			# print(type(text))
-			# xd = text.encode()
-			# print(xd)
-			# print(xd.decode('latin1'))
-
-			# text = text.encode().decode('latin1')
-
 			message_blocks = helpers.split_message(text, 8)
-
-			# print('debug 2')
-			# print(message_blocks)
-			# print(type(message_blocks))
-
 			binary_blocks = helpers.binary_message_blocks(message_blocks)
-
-			# print('debug 3')
-			# print(binary_blocks)
-			# print(type(binary_blocks))
 
 			binary_cipher_blocks = []
 			for index, block in enumerate(binary_blocks):
