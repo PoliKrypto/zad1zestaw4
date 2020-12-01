@@ -19,7 +19,6 @@ def decrypt(request):
 	key1, key2, key3 = request.data['key1'], request.data['key2'], request.data['key3']
 
 	encryptor = DesxEncryption(key1, key2, key3)
-	print(request.data['text'].encode().decode('latin1'))
 	text = encryptor.desx(request.data['text'], decoding=True)
 
 	return JsonResponse({'text': text.decode('latin1'), 'key1': key1, 'key2': key2, 'key3': key3}, status=200)
