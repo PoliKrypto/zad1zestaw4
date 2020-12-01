@@ -3,191 +3,216 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-      $(document).ready(function () {
-        $("#submit_encrypt").click(function () {
-          var settings = {
-            "url": "http://localhost:8000/api/encrypt",
-            "method": "POST",
-            "timeout": 0,
-            "headers": {
-              "Content-Type": "application/json"
-            },
-            "data": JSON.stringify({
-              "text": $("#input_encrypt").val(),
-              "key1": $("#key1").val(),
-              "key2": $("#key2").val(),
-              "key3": $("#key3").val(),
-              "type": "none",
-              "filename": "none"
-            }),
-          };
+        $(document).ready(function () {
+            $("#submit_encrypt").click(function () {
+                var settings = {
+                    "url": "http://localhost:8000/api/encrypt",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({
+                        "text": $("#input_encrypt").val(),
+                        "key1": $("#key1").val(),
+                        "key2": $("#key2").val(),
+                        "key3": $("#key3").val(),
+                        "type": "none",
+                        "filename": "none"
+                    }),
+                };
 
-          $.ajax(settings).done(function (response) {
-            $("#input_decrypt").val(response.text)
-            console.log(response.text);
-          });
-        });
-
-        $("#submit_decrypt").click(function () {
-          var settings = {
-            "url": "http://localhost:8000/api/decrypt",
-            "method": "POST",
-            "timeout": 0,
-            "headers": {
-              "Content-Type": "application/json"
-            },
-            "data": JSON.stringify({
-              "text": $("#input_decrypt").val(),
-              "key1": $("#key1").val(),
-              "key2": $("#key2").val(),
-              "key3": $("#key3").val(),
-              "type": "none",
-              "filename": "none"
-            }),
-          };
-
-          $.ajax(settings).done(function (response) {
-            $("#input_encrypt").val(response.text)
-          });
-        });
-
-        function generate_key() {
-          var result = '';
-          var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-          var charactersLength = characters.length;
-          for (var i = 0; i < 8; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          }
-          return result;
-        }
-
-        $("#generate_keys").click(function () {
-          $("#key1").val(generate_key())
-          $("#key2").val(generate_key())
-          $("#key3").val(generate_key())
-        })
-
-        $("#save_keys").click(function () {
-          $("<a />", {
-            "download": "keys.json",
-            "href": "data:application/json," + encodeURIComponent(JSON.stringify({
-              "key1": $("#key1").val(),
-              "key2": $("#key2").val(),
-              "key3": $("#key3").val(),
-            }))
-          }).appendTo("body")
-            .click(function () {
-              $(this).remove()
-            })[0].click()
-        })
-
-        // $("#save_encrypted_file").click(function () {
-        //   $("<a />", {
-        //     "download": "encrypted.bin",
-        //     "href": "data:text/plain;base64," + encodeURIComponent($("#input_decrypt").val())
-        //   }).appendTo("body")
-        //     .click(function () {
-        //       $(this).remove()
-        //     })[0].click()
-        // })
-
-        $("#file_selector_encrypt").change(function (event) {
-          const reader = new FileReader();
-          reader.onload = function () {
-            console.log(reader.result);
-            console.log(typeof reader.result)
-            var settings = {
-              "url": "http://localhost:8000/api/encrypt",
-              "method": "POST",
-              "timeout": 0,
-              "headers": {
-                "Content-Type": "application/json"
-              },
-              "data": JSON.stringify({
-                "text": reader.result,
-                "key1": $("#key1").val(),
-                "key2": $("#key2").val(),
-                "key3": $("#key3").val(),
-                "type": event.target.files[0].type,
-                "filename": event.target.files[0].name
-              }),
-            };
-
-            $.ajax(settings).done(function (response) {
-              $("<a />", {
-                "download": "encrypted_" + response.filename,
-                "href": `data:${response.type},` + encodeURIComponent(response.text)
-              }).appendTo("body")
-                .click(function () {
-                  $(this).remove()
-                })[0].click()
+                $.ajax(settings).done(function (response) {
+                    $("#input_decrypt").val(response.text)
+                    console.log(response.text);
+                });
             });
-          }
-          //reader.readAsText(event.target.files[0], 'ascii')
-          reader.readAsBinaryString(event.target.files[0]);
-        })
 
-        $("#file_selector_decrypt").change(function (event) {
-          const reader = new FileReader();
-          reader.onload = function () {
-            console.log(reader.result);
-            var settings = {
-              "url": "http://localhost:8000/api/decrypt",
-              "method": "POST",
-              "timeout": 0,
-              "headers": {
-                "Content-Type": "application/json"
-              },
-              "data": JSON.stringify({
-                "text": reader.result,
-                "key1": $("#key1").val(),
-                "key2": $("#key2").val(),
-                "key3": $("#key3").val(),
-                "type": event.target.files[0].type,
-                "filename": event.target.files[0].name
-              }),
-            };
+            $("#submit_decrypt").click(function () {
+                var settings = {
+                    "url": "http://localhost:8000/api/decrypt",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({
+                        "text": $("#input_decrypt").val(),
+                        "key1": $("#key1").val(),
+                        "key2": $("#key2").val(),
+                        "key3": $("#key3").val(),
+                        "type": "none",
+                        "filename": "none"
+                    }),
+                };
 
-            $.ajax(settings).done(function (response) {
-              $("<a />", {
-                "download": "decrypted_" + response.filename,
-                "href": `data:${response.type},` + encodeURIComponent(response.text)
-              }).appendTo("body")
-                .click(function () {
-                  $(this).remove()
-                })[0].click()
+                $.ajax(settings).done(function (response) {
+                    $("#input_encrypt").val(response.text)
+                });
             });
-          }
-          //reader.readAsText(event.target.files[0])
-          reader.readAsBinaryString(event.target.files[0]);
-        })
+
+            function generate_key() {
+                var result = '';
+                var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var charactersLength = characters.length;
+                for (var i = 0; i < 8; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                return result;
+            }
+
+            $("#generate_keys").click(function () {
+                $("#key1").val(generate_key())
+                $("#key2").val(generate_key())
+                $("#key3").val(generate_key())
+            })
+
+            $("#save_keys").click(function () {
+                $("<a />", {
+                    "download": "keys.json",
+                    "href": "data:application/json," + encodeURIComponent(JSON.stringify({
+                        "key1": $("#key1").val(),
+                        "key2": $("#key2").val(),
+                        "key3": $("#key3").val(),
+                    }))
+                }).appendTo("body")
+                    .click(function () {
+                        $(this).remove()
+                    })[0].click()
+            })
+
+            // $("#save_encrypted_file").click(function () {
+            //   $("<a />", {
+            //     "download": "encrypted.bin",
+            //     "href": "data:text/plain;base64," + encodeURIComponent($("#input_decrypt").val())
+            //   }).appendTo("body")
+            //     .click(function () {
+            //       $(this).remove()
+            //     })[0].click()
+            // })
+
+            // $("#file_selector_encrypt").change(function (event) {
+            //     const reader = new FileReader();
+            //     reader.onload = function () {
+            //         console.log(reader.result);
+            //         console.log(typeof reader.result)
+            //         var settings = {
+            //             "url": "http://localhost:8000/api/encrypt",
+            //             "method": "POST",
+            //             "timeout": 0,
+            //             "headers": {
+            //                 "Content-Type": "application/json"
+            //             },
+            //             "data": JSON.stringify({
+            //                 "text": reader.result,
+            //                 "key1": $("#key1").val(),
+            //                 "key2": $("#key2").val(),
+            //                 "key3": $("#key3").val(),
+            //                 "type": event.target.files[0].type,
+            //                 "filename": event.target.files[0].name
+            //             }),
+            //         };
+
+            //         $.ajax(settings).done(function (response) {
+            //             $("<a />", {
+            //                 "download": "encrypted_" + response.filename,
+            //                 "href": `data:${response.type},` + encodeURIComponent(response.text)
+            //             }).appendTo("body")
+            //                 .click(function () {
+            //                     $(this).remove()
+            //                 })[0].click()
+            //         });
+            //     }
+            //     //reader.readAsText(event.target.files[0], 'ascii')
+            //     reader.readAsBinaryString(event.target.files[0]);
+            // })
+
+            // $("#file_selector_decrypt").change(function (event) {
+            //     const reader = new FileReader();
+            //     reader.onload = function () {
+            //         console.log(reader.result);
+            //         var settings = {
+            //             "url": "http://localhost:8000/api/decrypt",
+            //             "method": "POST",
+            //             "timeout": 0,
+            //             "headers": {
+            //                 "Content-Type": "application/json"
+            //             },
+            //             "data": JSON.stringify({
+            //                 "text": reader.result,
+            //                 "key1": $("#key1").val(),
+            //                 "key2": $("#key2").val(),
+            //                 "key3": $("#key3").val(),
+            //                 "type": event.target.files[0].type,
+            //                 "filename": event.target.files[0].name
+            //             }),
+            //         };
+            //
+            //         $.ajax(settings).done(function (response) {
+            //             $("<a />", {
+            //                 "download": "decrypted_" + response.filename,
+            //                 "href": `data:${response.type},` + encodeURIComponent(response.text)
+            //             }).appendTo("body")
+            //                 .click(function () {
+            //                     $(this).remove()
+            //                 })[0].click()
+            //         });
+            //     }
+            //     //reader.readAsText(event.target.files[0])
+            //     reader.readAsBinaryString(event.target.files[0]);
+            // })
 
 
-      });
+        });
     </script>
+    <title>DESX</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<input type="text" id="key1">
-<input type="text" id="key2">
-<input type="text" id="key3">
-<input id="generate_keys" type="submit" value="generate keys">
-<input id="save_keys" type="submit" value="save keys">
+<h1>DESX</h1>
 
-<textarea id="input_encrypt" rows="4" cols="50">
-</textarea>
+<div id="keysAndButtons">
+    <div id="keys">
+        <input type="text" id="key1">
+        <input type="text" id="key2">
+        <input type="text" id="key3">
+    </div>
+    <div class="buttons">
+        <input id="generate_keys" type="submit" value="generate keys">
+        <input id="save_keys" type="submit" value="save keys">
+    </div>
+</div>
 
-<input id="submit_encrypt" type="submit" value="encrypt">
-<p>Choose a file to encrypt</p>
-<input id="file_selector_encrypt" type="file" value="encrypt file">
+<div class="area">
+    <p>Decrypted text</p>
+    <textarea id="input_encrypt" rows="4" cols="50"></textarea>
+    <div class="buttons">
+        <input id="submit_encrypt" type="submit" value="encrypt">
+    </div>
+</div>
 
-<textarea id="input_decrypt" rows="4" cols="50">
-</textarea>
 
-<input id="submit_decrypt" type="submit" value="decrypt">
+<div class="area">
+    <p>Encrypted text</p>
+    <textarea id="input_decrypt" rows="4" cols="50"></textarea>
+    <div class="buttons">
+        <input id="submit_decrypt" type="submit" value="decrypt">
+    </div>
+</div>
 
-<p>Choose a file to decrypt</p>
-<input id="file_selector_decrypt" type="file" value="decrypt file">
+<!--<div class="selectFilesArea">-->
+<!--    <div class="selectFiles">-->
+<!--        <p>Choose a file to encrypt</p>-->
+<!--        <input id="file_selector_encrypt" type="file" value="encrypt file">-->
+<!--    </div>-->
+<!--    <div class="selectFiles">-->
+<!--        <p>Choose a file to decrypt</p>-->
+<!--        <input id="file_selector_decrypt" type="file" value="decrypt file">-->
+<!--    </div>-->
+<!--</div>-->
+
+
 <!--<input id="save_encrypted_file" type="submit" value="save as file">-->
 
 </body>
