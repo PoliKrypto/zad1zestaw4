@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
-
 from .utils.desx_encryption import DesxEncryption
 
 
@@ -12,7 +11,7 @@ def encrypt(request):
 	encryptor = DesxEncryption(key1, key2, key3)
 	text = encryptor.desx(request.data['text'], decoding=False)
 
-	return JsonResponse({'text': text, 'key1': key1, 'key2': key2, 'key3': key3, 'type': request.data['type'], 'filename': request.data['filename']}, status=200)
+	return JsonResponse({'text': text, 'key1': key1, 'key2': key2, 'key3': key3}, status=200)
 
 
 @api_view(['POST'])
@@ -22,4 +21,4 @@ def decrypt(request):
 	encryptor = DesxEncryption(key1, key2, key3)
 	text = encryptor.desx(request.data['text'], decoding=True)
 
-	return JsonResponse({'text': text, 'key1': key1, 'key2': key2, 'key3': key3, 'type': request.data['type'], 'filename': request.data['filename']}, status=200)
+	return JsonResponse({'text': text, 'key1': key1, 'key2': key2, 'key3': key3}, status=200)
