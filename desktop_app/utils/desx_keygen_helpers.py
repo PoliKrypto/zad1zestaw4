@@ -72,8 +72,11 @@ def sub_keys_gen(shifted_keys):
 
 
 def keys_generator(key):
+    # bierzemy 56 bitów z klucza
     perm_key = key_permutation(key, PC_1)
+    # przesunięcie
     shifted_keys = shifts(perm_key)
+    # generujemy 16 kluczy 48 bitów każdy
     sub_keys = sub_keys_gen(shifted_keys)
     return sub_keys
 
@@ -114,8 +117,12 @@ def perm_s(xor_blocks):
           (2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11))
     s = (s1, s2, s3, s4, s5, s6, s7, s8)
     for i in range(8):
+        # bierzemy odpowiedni blok
         tab_s = s[i]
+        # pierwszy i ostatni bit danych określa wiersz
         row = int(xor_blocks[i][0] + xor_blocks[i][-1], 2)
+        # pozostałe bity kolumnę S-BOXa
         column = int(xor_blocks[i][1:-1], 2)
+        # wynikiem działania każdego S-bloku są 4 bity wyjściowe
         result += "{0:04b}".format(tab_s[row][column])
     return result
